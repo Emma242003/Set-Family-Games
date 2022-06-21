@@ -137,7 +137,9 @@ def display_kaarten(kaarten):
     pygame.draw.rect(gameDisplay, (0, 0, 0), (500, 220, 170, 40), 3)  
     button1 = font.render('Reset kaarten', True, (0, 0, 0))
     gameDisplay.blit(button1, (510,230))
-
+    
+    for i in index_set:
+        pygame.draw.rect(gameDisplay, (0, 0, 0), (displaycards[i][0],displaycards[i][1], distance_x, distance_y), 3)
     
 # implementen van tijd : 
 
@@ -168,7 +170,9 @@ def game():
     
     
     mogelijk_set=[]
+    global index_set
     index_set = []
+
     
     scores=0
     newcards = True
@@ -205,12 +209,15 @@ def game():
                 run=False
             if event.type == pygame.MOUSEBUTTONUP: # verteld het programma wat te doen wanneer op het scherm geklikt wordt
                 pos=pygame.mouse.get_pos()
-                print(pos)
                 for i in range(0,12):
                     if displaycards[i][0] < pos[0] < (displaycards[i][0]+distance_x) and displaycards[i][1] < pos[1] < (displaycards[i][1]+distance_y):
-                        mogelijk_set.append(kaarten[i])
-                        index_set.append(i)
-                        pygame.draw.rect(gameDisplay, (0, 0, 0), (displaycards[i][0],displaycards[i][1], distance_x, distance_y), 3)
+                        #checkt of de kaart al aangeklikt is 
+                        if i in index_set:
+                            index_set.remove(i)
+                            mogelijk_set.remove(kaarten[i])
+                        else:
+                            index_set.append(i)
+                            mogelijk_set.append(kaarten[i])
                 if 500 < pos[0] < 670 and 220 < pos[1] < 260:
                     mogelijk_set.clear()
             
