@@ -78,6 +78,24 @@ def checkset(kaarten):
                         s+=1
     return sets
 
+def kaartnaam(invoer):
+    invoer=invoer.replace('(','')
+    invoer=invoer.replace(')','')
+    invoer=invoer.replace(',','')
+    kleur=['green','purple','red']
+    vulling=['empty','shaded','filled']
+    vorm=['diamond','oval','squiggle']
+    aantal=['1','2','3']
+    a=kleur[int(invoer[0])]
+    b=vulling[int(invoer[1])]
+    c=vorm[int(invoer[2])]
+    d=aantal[int(invoer[3])]
+    return a+c+b+d
+
+def afbeelding(invoer):
+    invoer=kaartnaam(invoer)
+    a=pygame.image.load(os.path.join('kaarten', invoer+'.gif'))
+    return a
 
 
 Color_Background = (129, 218, 232)
@@ -88,94 +106,6 @@ display_height = 655
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Set! Family Games')
 
-dictionary = {'(0,0,0,0)': pygame.image.load(os.path.join('kaarten', 'greendiamondempty1.gif')),
-            '(0,0,0,1)': pygame.image.load(os.path.join('kaarten', 'greendiamondempty2.gif')),
-            '(0,0,0,2)': pygame.image.load(os.path.join('kaarten', 'greendiamondempty3.gif')),
-            '(0,2,0,0)': pygame.image.load(os.path.join('kaarten', 'greendiamondfilled1.gif')),
-            '(0,2,0,1)': pygame.image.load(os.path.join('kaarten', 'greendiamondfilled2.gif')),
-            '(0,2,0,2)': pygame.image.load(os.path.join('kaarten', 'greendiamondfilled3.gif')),
-            '(0,1,0,0)': pygame.image.load(os.path.join('kaarten', 'greendiamondshaded1.gif')),
-            '(0,1,0,1)': pygame.image.load(os.path.join('kaarten', 'greendiamondshaded2.gif')),
-            '(0,1,0,2)': pygame.image.load(os.path.join('kaarten', 'greendiamondshaded3.gif')),
-            '(0,0,1,0)': pygame.image.load(os.path.join('kaarten', 'greenovalempty1.gif')),
-            '(0,0,1,1)': pygame.image.load(os.path.join('kaarten', 'greenovalempty2.gif')),
-            '(0,0,1,2)': pygame.image.load(os.path.join('kaarten', 'greenovalempty3.gif')),
-            '(0,2,1,0)': pygame.image.load(os.path.join('kaarten', 'greenovalfilled1.gif')),
-            '(0,2,1,1)': pygame.image.load(os.path.join('kaarten', 'greenovalfilled2.gif')),
-            '(0,2,1,2)': pygame.image.load(os.path.join('kaarten', 'greenovalfilled3.gif')),
-            '(0,1,1,0)': pygame.image.load(os.path.join('kaarten', 'greenovalshaded1.gif')),
-            '(0,1,1,1)': pygame.image.load(os.path.join('kaarten', 'greenovalshaded2.gif')),
-            '(0,1,1,2)': pygame.image.load(os.path.join('kaarten', 'greenovalshaded3.gif')),
-            '(0,0,2,0)': pygame.image.load(os.path.join('kaarten', 'greensquiggleempty1.gif')),
-            '(0,0,2,1)': pygame.image.load(os.path.join('kaarten', 'greensquiggleempty2.gif')),
-            '(0,0,2,2)': pygame.image.load(os.path.join('kaarten', 'greensquiggleempty3.gif')),
-            '(0,2,2,0)': pygame.image.load(os.path.join('kaarten', 'greensquigglefilled1.gif')),
-            '(0,2,2,1)': pygame.image.load(os.path.join('kaarten', 'greensquigglefilled2.gif')),
-            '(0,2,2,2)': pygame.image.load(os.path.join('kaarten', 'greensquigglefilled3.gif')),
-            '(0,1,2,0)': pygame.image.load(os.path.join('kaarten', 'greensquiggleshaded1.gif')),
-            '(0,1,2,1)': pygame.image.load(os.path.join('kaarten', 'greensquiggleshaded2.gif')),
-            '(0,1,2,2)': pygame.image.load(os.path.join('kaarten', 'greensquiggleshaded3.gif')),
-
-
-            '(1,0,0,0)': pygame.image.load(os.path.join('kaarten', 'purplediamondempty1.gif')),
-            '(1,0,0,1)': pygame.image.load(os.path.join('kaarten', 'purplediamondempty2.gif')),
-            '(1,0,0,2)': pygame.image.load(os.path.join('kaarten', 'purplediamondempty3.gif')),
-            '(1,2,0,0)': pygame.image.load(os.path.join('kaarten', 'purplediamondfilled1.gif')),
-            '(1,2,0,1)': pygame.image.load(os.path.join('kaarten', 'purplediamondfilled2.gif')),
-            '(1,2,0,2)': pygame.image.load(os.path.join('kaarten', 'purplediamondfilled3.gif')),
-            '(1,1,0,0)': pygame.image.load(os.path.join('kaarten', 'purplediamondshaded1.gif')),
-            '(1,1,0,1)': pygame.image.load(os.path.join('kaarten', 'purplediamondshaded2.gif')),
-            '(1,1,0,2)': pygame.image.load(os.path.join('kaarten', 'purplediamondshaded3.gif')),
-            '(1,0,1,0)': pygame.image.load(os.path.join('kaarten', 'purpleovalempty1.gif')),
-            '(1,0,1,1)': pygame.image.load(os.path.join('kaarten', 'purpleovalempty2.gif')),
-            '(1,0,1,2)': pygame.image.load(os.path.join('kaarten', 'purpleovalempty3.gif')),
-            '(1,2,1,0)': pygame.image.load(os.path.join('kaarten', 'purpleovalfilled1.gif')),
-            '(1,2,1,1)': pygame.image.load(os.path.join('kaarten', 'purpleovalfilled2.gif')),
-            '(1,2,1,2)': pygame.image.load(os.path.join('kaarten', 'purpleovalfilled3.gif')),
-            '(1,1,1,0)': pygame.image.load(os.path.join('kaarten', 'purpleovalshaded1.gif')),
-            '(1,1,1,1)': pygame.image.load(os.path.join('kaarten', 'purpleovalshaded2.gif')),
-            '(1,1,1,2)': pygame.image.load(os.path.join('kaarten', 'purpleovalshaded3.gif')),
-            '(1,0,2,0)': pygame.image.load(os.path.join('kaarten', 'purplesquiggleempty1.gif')),
-            '(1,0,2,1)': pygame.image.load(os.path.join('kaarten', 'purplesquiggleempty2.gif')),
-            '(1,0,2,2)': pygame.image.load(os.path.join('kaarten', 'purplesquiggleempty3.gif')),
-            '(1,2,2,0)': pygame.image.load(os.path.join('kaarten', 'purplesquigglefilled1.gif')),
-            '(1,2,2,1)': pygame.image.load(os.path.join('kaarten', 'purplesquigglefilled2.gif')),
-            '(1,2,2,2)': pygame.image.load(os.path.join('kaarten', 'purplesquigglefilled3.gif')),
-            '(1,1,2,0)': pygame.image.load(os.path.join('kaarten', 'purplesquiggleshaded1.gif')),
-            '(1,1,2,1)': pygame.image.load(os.path.join('kaarten', 'purplesquiggleshaded2.gif')),
-            '(1,1,2,2)': pygame.image.load(os.path.join('kaarten', 'purplesquiggleshaded3.gif')),
-
-
-            '(2,0,0,0)': pygame.image.load(os.path.join('kaarten', 'reddiamondempty1.gif')),
-            '(2,0,0,1)': pygame.image.load(os.path.join('kaarten', 'reddiamondempty2.gif')),
-            '(2,0,0,2)': pygame.image.load(os.path.join('kaarten', 'reddiamondempty3.gif')),
-            '(2,2,0,0)': pygame.image.load(os.path.join('kaarten', 'reddiamondfilled1.gif')),
-            '(2,2,0,1)': pygame.image.load(os.path.join('kaarten', 'reddiamondfilled2.gif')),
-            '(2,2,0,2)': pygame.image.load(os.path.join('kaarten', 'reddiamondfilled3.gif')),
-            '(2,1,0,0)': pygame.image.load(os.path.join('kaarten', 'reddiamondshaded1.gif')),
-            '(2,1,0,1)': pygame.image.load(os.path.join('kaarten', 'reddiamondshaded2.gif')),
-            '(2,1,0,2)': pygame.image.load(os.path.join('kaarten', 'reddiamondshaded3.gif')),
-            '(2,0,1,0)': pygame.image.load(os.path.join('kaarten', 'redovalempty1.gif')),
-            '(2,0,1,1)': pygame.image.load(os.path.join('kaarten', 'redovalempty2.gif')),
-            '(2,0,1,2)': pygame.image.load(os.path.join('kaarten', 'redovalempty3.gif')),
-            '(2,2,1,0)': pygame.image.load(os.path.join('kaarten', 'redovalfilled1.gif')),
-            '(2,2,1,1)': pygame.image.load(os.path.join('kaarten', 'redovalfilled2.gif')),
-            '(2,2,1,2)': pygame.image.load(os.path.join('kaarten', 'redovalfilled3.gif')),
-            '(2,1,1,0)': pygame.image.load(os.path.join('kaarten', 'redovalshaded1.gif')),
-            '(2,1,1,1)': pygame.image.load(os.path.join('kaarten', 'redovalshaded2.gif')),
-            '(2,1,1,2)': pygame.image.load(os.path.join('kaarten', 'redovalshaded3.gif')),
-            '(2,0,2,0)': pygame.image.load(os.path.join('kaarten', 'redsquiggleempty1.gif')),
-            '(2,0,2,1)': pygame.image.load(os.path.join('kaarten', 'redsquiggleempty2.gif')),
-            '(2,0,2,2)': pygame.image.load(os.path.join('kaarten', 'redsquiggleempty3.gif')),
-            '(2,2,2,0)': pygame.image.load(os.path.join('kaarten', 'redsquigglefilled1.gif')),
-            '(2,2,2,1)': pygame.image.load(os.path.join('kaarten', 'redsquigglefilled2.gif')),
-            '(2,2,2,2)': pygame.image.load(os.path.join('kaarten', 'redsquigglefilled3.gif')),
-            '(2,1,2,0)': pygame.image.load(os.path.join('kaarten', 'redsquiggleshaded1.gif')),
-            '(2,1,2,1)': pygame.image.load(os.path.join('kaarten', 'redsquiggleshaded2.gif')),
-            '(2,1,2,2)': pygame.image.load(os.path.join('kaarten', 'redsquiggleshaded3.gif')),
-            }
-
-
 def display_kaarten(kaarten):
 
     distance_x = 100
@@ -183,28 +113,28 @@ def display_kaarten(kaarten):
 
     # Display van kaarten & extra's :
     gameDisplay.fill(Color_Background)
-    gameDisplay.blit(dictionary[kaarten[0]], (15, 10))
-    gameDisplay.blit(dictionary[kaarten[1]],
+    gameDisplay.blit(afbeelding(kaarten[0]), (15, 10))
+    gameDisplay.blit(afbeelding(kaarten[1]),
                      (2*15 + 1*distance_x, 10 + 0*distance_y))
-    gameDisplay.blit(dictionary[kaarten[2]],
+    gameDisplay.blit(afbeelding(kaarten[2]),
                      (3*15 + 2*distance_x, 10 + 0*distance_y))
-    gameDisplay.blit(dictionary[kaarten[3]],
+    gameDisplay.blit(afbeelding(kaarten[3]),
                      (4*15 + 3*distance_x, 10 + 0*distance_y))
-    gameDisplay.blit(dictionary[kaarten[4]],
+    gameDisplay.blit(afbeelding(kaarten[4]),
                      (1*15 + 0*distance_x, 2*10 + 1*distance_y))
-    gameDisplay.blit(dictionary[kaarten[5]],
+    gameDisplay.blit(afbeelding(kaarten[5]),
                      (2*15 + 1*distance_x, 2*10 + 1*distance_y))
-    gameDisplay.blit(dictionary[kaarten[6]],
+    gameDisplay.blit(afbeelding(kaarten[6]),
                      (3*15 + 2*distance_x, 2*10 + 1*distance_y))
-    gameDisplay.blit(dictionary[kaarten[7]],
+    gameDisplay.blit(afbeelding(kaarten[7]),
                      (4*15 + 3*distance_x, 2*10 + 1*distance_y))
-    gameDisplay.blit(dictionary[kaarten[8]],
+    gameDisplay.blit(afbeelding(kaarten[8]),
                      (1*15 + 0*distance_x, 3*10 + 2*distance_y))
-    gameDisplay.blit(dictionary[kaarten[9]],
+    gameDisplay.blit(afbeelding(kaarten[9]),
                      (2*15 + 1*distance_x, 3*10 + 2*distance_y))
-    gameDisplay.blit(dictionary[kaarten[10]],
+    gameDisplay.blit(afbeelding(kaarten[10]),
                      (3*15 + 2*distance_x, 3*10 + 2*distance_y))
-    gameDisplay.blit(dictionary[kaarten[11]],
+    gameDisplay.blit(afbeelding(kaarten[11]),
                      (4*15 + 3*distance_x, 3*10 + 2*distance_y))
     
     gameDisplay.blit(pygame.transform.scale((pygame.image.load(
@@ -314,10 +244,10 @@ def deck():
                     kaarten, sets=Kaart().__lijstsets__()
         if len(mogelijk_set) == 3:
             if len(checkset(mogelijk_set)) == 0:
-                print("no set")
+                print("No Set")
                 mogelijk_set.clear()
             else:
-                print("is set")
+                print("Is Set")
                 scores+=1
                 
                 for k in index_set:
