@@ -140,6 +140,7 @@ def display_kaarten(kaarten):
     
     for i in index_set:
         pygame.draw.rect(gameDisplay, (0, 0, 0), (displaycards[i][0],displaycards[i][1], distance_x, distance_y), 3)
+
     
 # implementen van tijd : 
 
@@ -162,7 +163,7 @@ def game():
     clock = pygame.time.Clock()
     global counter
     global text
-    counter, text = 30, '30'.rjust(3)
+    counter, text = 5, '5'.rjust(3)
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     
     
@@ -172,9 +173,9 @@ def game():
     mogelijk_set=[]
     global index_set
     index_set = []
-
     
-    scores=0
+    score1=0
+    score2=0
     newcards = True
     
     # main loop :
@@ -194,8 +195,11 @@ def game():
         
         #display van score, kaarten in de pot en de tijd 
         font = pygame.font.SysFont(None, 30)
-        score=font.render('Score:'+str(scores), True, (0,0,0))
-        gameDisplay.blit(score, (700, 230))
+        scores1=font.render('Eigen score:'+str(score1), True, (0,0,0))
+        gameDisplay.blit(scores1, (700, 230))
+        
+        scores2=font.render('Score computer:'+str(score2),True,(0,0,0))
+        gameDisplay.blit(scores2,(700, 250))
         
         display_pot=font.render('Kaarten in de pot :'+str(len(pot)),True,(0,0,0))
         gameDisplay.blit(display_pot, (500,400))
@@ -212,29 +216,38 @@ def game():
                 for i in range(0,12):
                     if displaycards[i][0] < pos[0] < (displaycards[i][0]+distance_x) and displaycards[i][1] < pos[1] < (displaycards[i][1]+distance_y):
                         #checkt of de kaart al aangeklikt is 
-                        if i in index_set:
-                            index_set.remove(i)
-                            mogelijk_set.remove(kaarten[i])
-                        else:
-                            index_set.append(i)
-                            mogelijk_set.append(kaarten[i])
+                       if i in index_set:
+                           index_set.remove(i)
+                           mogelijk_set.remove(kaarten[i])
+                       else:
+                           index_set.append(i)
+                           mogelijk_set.append(kaarten[i])
                 if 500 < pos[0] < 670 and 220 < pos[1] < 260:
                     mogelijk_set.clear()
             
             if event.type == pygame.USEREVENT:
                 counter -= 1
-                text = str(counter).rjust(3) if counter > 0 else 'Too slow!'
-        
-        
+                if counter > 0:
+                    text = str(counter).rjust(3) 
+                else:
+                    text= '0'.rjust(3)
+                    if len(checkset(kaarten))!=0:
+                        score2+=1
+                        counter = 6
+                    else:
+                        for k in (0,1,2):
+                            kaarten[k]=random.choice(pot)
+                            pot.remove(kaarten[k])
         if len(mogelijk_set) == 3:
             if len(checkset(mogelijk_set)) == 0:
                 print("no set")
                 mogelijk_set.clear()
                 index_set.clear()
+                score2+=1
             else:
                 print("is set")
-                scores+=1    #update de score
-                counter = 31 #reset de tijd 
+                score1+=1    #update de score
+                counter = 6 #reset de tijd 
   
                 #verwijdert de 3 nieuwe kaarten die op display staan vande pot :
                 for k in index_set:
@@ -249,4 +262,3 @@ def game():
     pygame.quit()
 
 game()
-
