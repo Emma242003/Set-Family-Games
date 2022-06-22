@@ -250,7 +250,7 @@ def game():
     #geluid wanneer een set of geen set gevonden wordt
     no_set_sound = mixer.Sound("no_set_sound.wav")
     is_set_sound = mixer.Sound("is_set_sound.wav")
-    time_sound   = mixer.Sound("time_sound2.wav")
+    time_sound   = mixer.Sound("time_sound.wav")
     
     while run:
         clock.tick(FPS)
