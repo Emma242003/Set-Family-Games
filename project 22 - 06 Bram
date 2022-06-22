@@ -1,3 +1,9 @@
+"""
+Eindopdracht Programmeren voor Wiskunde: Set 
+Gemaakt door : Bram Bouman (5329175) , Emma Scheepstra (...) , Michiel Kaptijn (...)
+
+"""
+
 import pygame
 import os
 import random
@@ -6,6 +12,14 @@ from pygame import mixer
 
 pygame.init()
 
+"""
+De Class die gebruikt is voor het spel set
+In de klas zijn verschillende definities geschreven voor het:
+    * checken van een set 
+    * Binnen twaalf kaarten checken welke er een set vormen 
+    * ... 
+
+"""
 
 class Kaart:
     def __init__(self, kaart_kleur=0, kaart_vulling=0, kaart_vorm=0, kaart_aantal=0):
@@ -236,6 +250,7 @@ def game():
     #geluid wanneer een set of geen set gevonden wordt
     no_set_sound = mixer.Sound("no_set_sound.wav")
     is_set_sound = mixer.Sound("is_set_sound.wav")
+    time_sound   = mixer.Sound("time_sound2.wav")
     
     while run:
         clock.tick(FPS)
@@ -284,6 +299,7 @@ def game():
                 if 500 < pos[0] < 670 and 220 < pos[1] < 260:
                     if checkset(kaarten) == 0: 
                         score1 += 1
+                        mixer.Sound.stop(time_sound)
                         is_set_sound.play()
                         for n in (0,1,2):
                             kaarten[n]=random.choice(pot)
@@ -292,12 +308,14 @@ def game():
                     else:
                         score2 += 1
                         counter = tijd+1
+                        mixer.Sound.stop(time_sound)
                         no_set_sound.play()
             
             if event.type == pygame.USEREVENT:
                 counter -= 1
                 if counter > 0:
                     text = str(counter).rjust(3) 
+                
                 else:
                     text= '0'.rjust(3)
                     if len(checkset(kaarten)) == 0 :
@@ -308,17 +326,21 @@ def game():
                     else:
                         score2+=1
                         counter = tijd+1
+                        mixer.Sound.stop(time_sound)
                         no_set_sound.play()
                         for l in checkset(kaarten)[0]:
                             index_set_comp = int(kaarten.index(l))
                             kaarten[index_set_comp] = random.choice(pot)
                             pot.remove(kaarten[index_set_comp])
+                if counter == 5:
+                    time_sound.play()
         
         
         if len(mogelijk_set) == 3:
             if len(checkset(mogelijk_set)) == 0:
                 print("no set")
                 counter = tijd + 1
+                mixer.Sound.stop(time_sound)
                 no_set_sound.play()
                 
                 mogelijk_set.clear()
@@ -327,9 +349,9 @@ def game():
                 
             else:
                 print("is set")
-                is_set_sound.play()
                 score1+=1    #update de score
                 counter = tijd+1 #reset de tijd 
+                mixer.Sound.stop(time_sound)
                 is_set_sound.play()
                 #verwijdert de 3 nieuwe kaarten die op display staan vande pot :
                 for k in index_set:
