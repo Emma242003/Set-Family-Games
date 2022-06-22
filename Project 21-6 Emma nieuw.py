@@ -1,6 +1,5 @@
-import pygame
-import os
-import random
+import pygame,os,random,sys
+
 
 pygame.init()
 
@@ -135,17 +134,12 @@ def display_kaarten(kaarten):
     
     pygame.draw.rect(gameDisplay, (181, 134, 181), (500, 220, 170, 40))
     pygame.draw.rect(gameDisplay, (0, 0, 0), (500, 220, 170, 40), 3)  
-    button1 = font.render('Reset kaarten', True, (0, 0, 0))
+    button1 = font.render('No sets', True, (0, 0, 0))
     gameDisplay.blit(button1, (510,230))
     
     for i in index_set:
         pygame.draw.rect(gameDisplay, (0, 0, 0), (displaycards[i][0],displaycards[i][1], distance_x, distance_y), 3)
-
-    
-# implementen van tijd : 
-
-
-
+        
 
 def game():
 
@@ -155,7 +149,9 @@ def game():
     for i in range(0,len(pot)):
         pot[i] = str(pot[i])
 
+    global kaarten    
     kaarten = random.sample(pot,12)
+    #print(kaarten)
     
     begin=True
     
@@ -173,7 +169,9 @@ def game():
     score1=0
     score2=0
     newcards = True
-    scores=0
+    
+    
+    
     # main loop :
 
     while begin:
@@ -211,8 +209,11 @@ def game():
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # verteld het programma te stoppen wanneer het scherm gesloten wordt
-                begin=False
-                run=False
+                #begin=False
+                #run=False
+                #pygame.display.update()
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONUP: # verteld het programma wat te doen wanneer op het scherm geklikt wordt
                 pos=pygame.mouse.get_pos()
                 if 390 < pos[0] < 610 and 250 < pos[1] < 340:
@@ -225,13 +226,14 @@ def game():
                     tijd=10
                     begin=False
                 
-        pygame.display.update()
-    #pygame.quit()
+        pygame.display.update()    
     
+    #geeft de tijd die je gebruikt tijdens het spelen van set 
     global counter, text
     counter, text = tijd, str(tijd).rjust(3)
     pygame.time.set_timer(pygame.USEREVENT, 1000)
     run=True
+    
     while run:
         clock.tick(FPS)
         
@@ -248,18 +250,19 @@ def game():
         
         #display van score, kaarten in de pot en de tijd 
         font = pygame.font.SysFont(None, 30)
-        scores1=font.render('Eigen score:'+str(score1), True, (0,0,0))
+        scores1=font.render('Player score: '+str(score1), True, (0,0,0))
         gameDisplay.blit(scores1, (700, 230))
         
-        scores2=font.render('Score computer:'+str(score2),True,(0,0,0))
+        scores2=font.render('Computer score: '+str(score2),True,(0,0,0))
         gameDisplay.blit(scores2,(700, 250))
         
-        display_pot=font.render('Kaarten in de pot :'+str(len(pot)),True,(0,0,0))
+        display_pot=font.render('Kaarten in de pot: '+str(len(pot)),True,(0,0,0))
         gameDisplay.blit(display_pot, (500,400))
         
-        display_time=font.render('Tijd om een set te vinden: '+text, True, (0, 0, 0))
+        display_time=font.render('Time: '+text, True, (0, 0, 0))
         gameDisplay.blit(display_time, (500,190))
-
+        
+        
         # event loop met alle mogelijke gebeurtenissen :
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # verteld het programma te stoppen wanneer het scherm gesloten wordt
@@ -276,7 +279,14 @@ def game():
                            index_set.append(i)
                            mogelijk_set.append(kaarten[i])
                 if 500 < pos[0] < 670 and 220 < pos[1] < 260:
-                    mogelijk_set.clear()
+                    if checkset(kaarten) == 0: 
+                        score1 += 1
+                        for n in (0,1,2):
+                            kaarten[n]=random.choice(pot)
+                            pot.remove(kaarten[n])
+                        
+                    else:
+                        score2 += 1
             
             if event.type == pygame.USEREVENT:
                 counter -= 1
@@ -284,13 +294,18 @@ def game():
                     text = str(counter).rjust(3) 
                 else:
                     text= '0'.rjust(3)
-                    if len(checkset(kaarten))!=0:
-                        score2+=1
-                        counter = tijd+1 
-                    else:
+                    if len(checkset(kaarten)) == 0 :
                         for k in (0,1,2):
                             kaarten[k]=random.choice(pot)
                             pot.remove(kaarten[k])
+                    
+                    else:
+                        score2+=1
+                        counter = tijd+1
+                        for l in checkset(kaarten)[0]:
+                            index_set_comp = int(kaarten.index(l))
+                            kaarten[index_set_comp] = random.choice(pot)
+                            pot.remove(kaarten[index_set_comp])
         
         
         if len(mogelijk_set) == 3:
@@ -299,6 +314,7 @@ def game():
                 mogelijk_set.clear()
                 index_set.clear()
                 score2+=1
+                
             else:
                 print("is set")
                 score1+=1    #update de score
